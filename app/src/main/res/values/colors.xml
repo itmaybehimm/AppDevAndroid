@@ -1,0 +1,9 @@
+<!-- res/values-night/colors.xml -->
+<resources>
+    <color name="background">#121212</color>
+    <color name="onBackground">#272727</color>
+    <color name="accent_orange_light">#F2613F</color>
+    <color name="accent_orange_medium">#9B3922</color>
+    <color name="accent_orange_dark">#481E14</color>
+    <color name="secondary">#ffffff</color>
+</resources>

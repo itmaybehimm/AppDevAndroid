@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/folderAll"
+        android:title="All"
+        />
+    <item android:id="@+id/folderImportant"
+        android:title="Important"
+
+        />
+
+    <item android:id="@+id/folderDummy1"
+        android:title="Dummy1"
+
+        />
+    <item android:id="@+id/folderDummy2"
+        android:title="Dummy2"
+
+        />
+    <item android:id="@+id/folderDummy3"
+        android:title="Dummy3"
+
+        />
+    <item android:id="@+id/folderDummy4"
+        android:title="Dummy4"
+
+        />
+
+
+</menu>
