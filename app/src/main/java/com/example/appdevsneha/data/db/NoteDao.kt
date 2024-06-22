@@ -3,19 +3,26 @@ package com.example.appdevsneha.data.db
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Upsert
+import androidx.room.Update
 import com.example.appdevsneha.data.model.Note
 
 @Dao
 interface NoteDao {
 
-    @Upsert
-    suspend fun upsertNote(note: Note)
+    @Insert
+    suspend fun insertNote(note: Note)
+
+    @Update
+    suspend fun updateNote(note:Note)
 
     @Delete
     suspend fun deleteNote(note: Note)
 
     @Query("SELECT * FROM note")
     fun readAllNotes():LiveData<List<Note>>
+
+    @Query("SELECT * FROM note WHERE id = :noteId LIMIT 1")
+    fun getNoteById(noteId: Int): LiveData<Note>
 }

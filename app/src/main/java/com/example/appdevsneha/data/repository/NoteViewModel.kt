@@ -25,5 +25,23 @@ class NoteViewModel(application: Application):AndroidViewModel(application) {
         }
     }
 
+    fun updateNote(note: Note) {
+        scope.launch {
+            repository.updateNote(note)
+        }
+
+    }
+
+    fun getNoteById(noteId: Int): LiveData<Note> {
+        return repository.getNoteById(noteId)
+    }
+
+    fun deleteNote(note: Note) {
+        scope.launch {
+
+            repository.deleteNote(note)
+        }
+
+    }
 
 }
