@@ -1,4 +1,4 @@
-package com.example.appdevsneha
+package com.example.appdevsneha.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

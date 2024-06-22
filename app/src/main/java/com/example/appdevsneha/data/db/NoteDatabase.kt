@@ -1,10 +1,10 @@
-package com.example.appdevsneha
+package com.example.appdevsneha.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
-import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
+import com.example.appdevsneha.data.model.Note
 import kotlin.concurrent.Volatile
 
 
@@ -18,15 +18,15 @@ abstract class NoteDatabase:RoomDatabase() {
 
 
     companion object{
-        private fun buildDatabase(context: Context):NoteDatabase{
-            return Room.databaseBuilder(context,NoteDatabase::class.java,"note-database").build()
+        private fun buildDatabase(context: Context): NoteDatabase {
+            return Room.databaseBuilder(context, NoteDatabase::class.java,"note-database").build()
         }
 
         @Volatile
-        private var INSTANCE:NoteDatabase? = null
+        private var INSTANCE: NoteDatabase? = null
 
-        fun getDatabaseInstance(context: Context):NoteDatabase{
-            if (INSTANCE==null){
+        fun getDatabaseInstance(context: Context): NoteDatabase {
+            if (INSTANCE ==null){
                 synchronized(this){
                     INSTANCE = buildDatabase(context)
                 }
