@@ -2,9 +2,7 @@ package com.example.appdevsneha.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.appdevsneha.data.db.FolderDao
-import com.example.appdevsneha.data.db.NoteDao
 import com.example.appdevsneha.data.model.Folder
-import com.example.appdevsneha.data.model.Note
 
 class FolderRepository(private val folderDao: FolderDao) {
     val readAllFolders:LiveData<List<Folder>> = folderDao.readAllFolders()

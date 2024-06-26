@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appdevsneha.R
 import com.example.appdevsneha.activity.edit_note.EditNote
+import com.example.appdevsneha.activity.quiz.QuizMain
 import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  binding: ActivityMainBinding
     private lateinit var addButton:FloatingActionButton
     private lateinit var folderAddButton:FloatingActionButton
+    private lateinit var quizButton:FloatingActionButton
     private lateinit var notes:LiveData<List<Note>>
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var folderViewModel: FolderViewModel
@@ -182,6 +184,7 @@ class MainActivity : AppCompatActivity() {
     private fun addListeners(){
         addButton = findViewById(R.id.addButton)
         folderAddButton=findViewById(R.id.folderAddButton)
+        quizButton=findViewById(R.id.quizButton)
 
         addButton.setOnClickListener{
             val intent = Intent(
@@ -193,6 +196,14 @@ class MainActivity : AppCompatActivity() {
 
         folderAddButton.setOnClickListener{
             showAddFolderDialog()
+        }
+
+        quizButton.setOnClickListener{
+            val intent = Intent(
+                this,
+                QuizMain::class.java
+            )
+            startActivity(intent)
         }
 
 
