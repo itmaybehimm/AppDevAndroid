@@ -28,4 +28,10 @@ interface NoteDao {
 
     @Query("SELECT * FROM note WHERE folder= :folderId")
     fun getNoteByFolderId(folderId:Int):LiveData<List<Note>>
+
+    @Query("SELECT * FROM note WHERE body LIKE :searchQuery")
+    fun searchNotes(searchQuery: String): LiveData<List<Note>>
+
+    @Query("SELECT * FROM note WHERE body LIKE :searchQuery AND folder = :folderId")
+    fun searchNotesInFolder(searchQuery: String, folderId: Int): LiveData<List<Note>>
 }

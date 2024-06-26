@@ -26,4 +26,12 @@ class NoteRepository(private val noteDao: NoteDao) {
         return noteDao.getNoteByFolderId(folderId)
     }
 
+    fun searchNotes(searchQuery:String):LiveData<List<Note>>{
+        return noteDao.searchNotes(searchQuery)
+    }
+
+    fun searchNotesInFolder(searchQuery:String,folderId:Int):LiveData<List<Note>>{
+        return noteDao.searchNotesInFolder(searchQuery,folderId)
+    }
+
 }

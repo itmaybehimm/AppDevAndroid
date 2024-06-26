@@ -19,6 +19,10 @@ class NoteViewModel(application: Application):AndroidViewModel(application) {
         readAllData = repository.readAllNotes
     }
 
+    fun readAllNotes():LiveData<List<Note>>{
+        return readAllData
+    }
+
     fun addNote(note: Note){
         scope.launch {
             repository.addNote(note)
@@ -36,10 +40,17 @@ class NoteViewModel(application: Application):AndroidViewModel(application) {
         return repository.getNoteById(noteId)
     }
 
-    fun getNoteByFolderId(folderId:Int):LiveData<List<Note>>{
+    fun getNotesByFolderId(folderId:Int):LiveData<List<Note>>{
         return  repository.getNoteByFolderId(folderId)
     }
 
+    fun searchNotes(searchQuery:String):LiveData<List<Note>>{
+        return repository.searchNotes(searchQuery)
+    }
+
+    fun searchNotesInFolder(searchQuery:String,folderId:Int):LiveData<List<Note>>{
+        return repository.searchNotesInFolder(searchQuery,folderId)
+    }
     fun deleteNote(note: Note) {
         scope.launch {
             repository.deleteNote(note)

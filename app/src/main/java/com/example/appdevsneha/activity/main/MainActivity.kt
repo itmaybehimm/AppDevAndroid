@@ -2,16 +2,15 @@ package com.example.appdevsneha.activity.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appdevsneha.R
@@ -20,7 +19,6 @@ import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
 import com.example.appdevsneha.data.repository.FolderViewModel
-import com.example.appdevsneha.data.repository.NoteRepository
 import com.example.appdevsneha.data.repository.NoteViewModel
 import com.example.appdevsneha.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var folderViewModel: FolderViewModel
     private lateinit var folderContainer: LinearLayout
+    private lateinit var searchView: SearchView
+    private var currentSearchString: String? = ""
+    private var currentFolderId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -51,38 +52,67 @@ class MainActivity : AppCompatActivity() {
         }
 
         db = NoteDatabase.getDatabaseInstance(applicationContext)
-        noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+        noteViewModel = ViewModelProvider(this)[NoteViewModel::class.java]
         folderContainer = findViewById(R.id.folderContainer)
+        searchView = findViewById(R.id.seachBar)
 
-        folderViewModel = ViewModelProvider(this).get(FolderViewModel::class.java)
+        folderViewModel = ViewModelProvider(this)[FolderViewModel::class.java]
 
-        folderViewModel.readAllFolders().observe(this, Observer { folders ->
+        folderViewModel.readAllFolders().observe(this) { folders ->
             folders?.let { populateFolders(it) }
-        })
-
-        notes = NoteRepository(db.noteDao()).readAllNotes
+        }
 
 
-        populate_notes()
-        add_listeners();
+        populateNotes()
+        addListeners()
+        setupSearch()
 
     }
 
-    fun populate_notes(){
-        notes.observe(this, Observer { notes ->
+    private fun setupSearch() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                currentSearchString=newText
+                populateNotes()
+                return true
+            }
+        })
+    }
+
+
+    fun populateNotes(){
+        val searchString = currentSearchString ?: ""
+        notes = when {
+            currentFolderId != null && searchString.isEmpty() -> {
+                noteViewModel.getNotesByFolderId(currentFolderId!!)
+            }
+            currentFolderId == null && searchString.isNotEmpty() -> {
+                noteViewModel.searchNotes("%$searchString%")
+            }
+            currentFolderId != null && searchString.isNotEmpty() -> {
+                noteViewModel.searchNotesInFolder("%$searchString%", currentFolderId!!)
+            }
+            else -> noteViewModel.readAllNotes()
+        }
+
+        notes.observe(this) { notes ->
             if (notes != null) {
                 binding.recyclerView.apply {
-                    layoutManager=GridLayoutManager(applicationContext,2)
-                    adapter= MainCardAdapter(notes,{ note ->
+                    layoutManager = GridLayoutManager(applicationContext, 2)
+                    adapter = MainCardAdapter(notes, { note ->
                         val intent = Intent(this@MainActivity, EditNote::class.java)
                         intent.putExtra("NOTE_ID", note.id)
                         startActivity(intent)
-                    },{note->
+                    }, { note ->
                         noteViewModel.deleteNote(note)
                     })
                 }
             }
-        })
+        }
     }
     private fun populateFolders(folders: List<Folder>) {
         folderContainer.removeAllViews()
@@ -102,10 +132,10 @@ class MainActivity : AppCompatActivity() {
             setPadding(16, 8, 16, 8)
             textSize = 10f
             setOnClickListener {
-                clearColor();
+                clearColor()
                 background.setTint(ContextCompat.getColor(applicationContext, R.color.accent_1))
-                notes = NoteRepository(db.noteDao()).readAllNotes
-                populate_notes()
+                currentFolderId = null
+                populateNotes()
             }
         }
         folderContainer.addView(allButton)
@@ -120,10 +150,10 @@ class MainActivity : AppCompatActivity() {
                 setPadding(16, 8, 16, 8)
                 textSize = 10f
                 setOnClickListener {
-                    clearColor();
+                    clearColor()
+                    currentFolderId = folder.id
                     background.setTint(ContextCompat.getColor(applicationContext, R.color.accent_1))
-                    notes = NoteRepository(db.noteDao()).getNoteByFolderId(folder.id)
-                    populate_notes()
+                    populateNotes()
                 }
             }
             folderContainer.addView(button)
@@ -138,7 +168,7 @@ class MainActivity : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Add Folder")
             .setView(dialogView)
-            .setPositiveButton("Add") { dialog, which ->
+            .setPositiveButton("Add") { _, _ ->
                 val folderName = folderNameInput.text.toString()
                 if (folderName.isNotEmpty()) {
                     val newFolder = Folder(name = folderName)
@@ -149,7 +179,7 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    fun add_listeners(){
+    private fun addListeners(){
         addButton = findViewById(R.id.addButton)
         folderAddButton=findViewById(R.id.folderAddButton)
 
@@ -164,13 +194,16 @@ class MainActivity : AppCompatActivity() {
         folderAddButton.setOnClickListener{
             showAddFolderDialog()
         }
+
+
     }
+
 
     private fun clearColor() {
         for (i in 0 until folderContainer.childCount) {
             val child = folderContainer.getChildAt(i)
             if (child is Button) {
-                child.backgroundTintList = null  // Reset background tint list to remove any color
+                child.backgroundTintList = null
             }
         }
     }

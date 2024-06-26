@@ -141,7 +141,7 @@ class EditNote : AppCompatActivity() {
                     folderId = folder.id
                     chooseFolderButton.background.setTint(ContextCompat.getColor(this, R.color.accent_1))
                     chooseFolderButton.setText(folder.name)
-                    saveNote(exit = false)
+
 
                 }
                 folderList.addView(folderButton)
@@ -156,7 +156,7 @@ class EditNote : AppCompatActivity() {
                 folderId=null
                 chooseFolderButton.background.setTint(ContextCompat.getColor(this,R.color.onBackground))
                 chooseFolderButton.setText("Folder")
-                saveNote(exit = false)
+
             }
             folderList.addView(folderButton)
             builder.setView(dialogLayout)
