@@ -22,4 +22,8 @@ class NoteRepository(private val noteDao: NoteDao) {
         return noteDao.getNoteById(noteId)
     }
 
+    fun getNoteByFolderId(folderId:Int):LiveData<List<Note>>{
+        return noteDao.getNoteByFolderId(folderId)
+    }
+
 }

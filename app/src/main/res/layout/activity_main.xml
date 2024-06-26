@@ -33,62 +33,7 @@
                 android:padding="5dp"
                 android:text="All"
                 android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <android.widget.Button
-                android:id="@+id/folderImportant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/rounded_rectangle"
-                android:padding="5dp"
-                android:text="Important"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <android.widget.Button
-                android:id="@+id/folderDummy1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/rounded_rectangle"
-                android:padding="5dp"
-                android:text="Dummy1"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <android.widget.Button
-                android:id="@+id/folderDummy2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/rounded_rectangle"
-                android:padding="5dp"
-                android:text="Dummy2"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <android.widget.Button
-                android:id="@+id/folderDummy3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/rounded_rectangle"
-                android:padding="5dp"
-                android:text="Dummy3"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
-
-            <android.widget.Button
-                android:id="@+id/folderDummy4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/rounded_rectangle"
-                android:padding="5dp"
-                android:text="Dummy4"
-                android:textColor="@android:color/white"
-                android:textSize="10sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </HorizontalScrollView>
@@ -129,6 +74,19 @@
         android:src="@drawable/baseline_question_answer_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/folderAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/accent_1"
+        android:src="@drawable/baseline_create_new_folder_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toEndOf="@+id/quizButton"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

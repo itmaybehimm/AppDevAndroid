@@ -36,9 +36,12 @@ class NoteViewModel(application: Application):AndroidViewModel(application) {
         return repository.getNoteById(noteId)
     }
 
+    fun getNoteByFolderId(folderId:Int):LiveData<List<Note>>{
+        return  repository.getNoteByFolderId(folderId)
+    }
+
     fun deleteNote(note: Note) {
         scope.launch {
-
             repository.deleteNote(note)
         }
 

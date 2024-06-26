@@ -2,27 +2,41 @@ package com.example.appdevsneha.activity.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appdevsneha.R
 import com.example.appdevsneha.activity.edit_note.EditNote
 import com.example.appdevsneha.data.db.NoteDatabase
+import com.example.appdevsneha.data.model.Folder
+import com.example.appdevsneha.data.model.Note
+import com.example.appdevsneha.data.repository.FolderViewModel
 import com.example.appdevsneha.data.repository.NoteRepository
 import com.example.appdevsneha.data.repository.NoteViewModel
 import com.example.appdevsneha.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: NoteDatabase
     private lateinit var  binding: ActivityMainBinding
     private lateinit var addButton:FloatingActionButton
+    private lateinit var folderAddButton:FloatingActionButton
+    private lateinit var notes:LiveData<List<Note>>
     private lateinit var noteViewModel: NoteViewModel
+    private lateinit var folderViewModel: FolderViewModel
+    private lateinit var folderContainer: LinearLayout
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -38,6 +52,16 @@ class MainActivity : AppCompatActivity() {
 
         db = NoteDatabase.getDatabaseInstance(applicationContext)
         noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+        folderContainer = findViewById(R.id.folderContainer)
+
+        folderViewModel = ViewModelProvider(this).get(FolderViewModel::class.java)
+
+        folderViewModel.readAllFolders().observe(this, Observer { folders ->
+            folders?.let { populateFolders(it) }
+        })
+
+        notes = NoteRepository(db.noteDao()).readAllNotes
+
 
         populate_notes()
         add_listeners();
@@ -45,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun populate_notes(){
-        val notes = NoteRepository(db.noteDao()).readAllNotes
         notes.observe(this, Observer { notes ->
             if (notes != null) {
                 binding.recyclerView.apply {
@@ -61,9 +84,74 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+    private fun populateFolders(folders: List<Folder>) {
+        folderContainer.removeAllViews()
+
+        val buttonLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(16, 8, 16, 8) // Set margins
+        }
+
+        val allButton = Button(this).apply {
+            text = "All"
+            layoutParams = buttonLayoutParams
+            setBackgroundResource(R.drawable.rounded_rectangle)
+            setTextColor(resources.getColor(android.R.color.white))
+            setPadding(16, 8, 16, 8)
+            textSize = 10f
+            setOnClickListener {
+                clearColor();
+                background.setTint(ContextCompat.getColor(applicationContext, R.color.accent_1))
+                notes = NoteRepository(db.noteDao()).readAllNotes
+                populate_notes()
+            }
+        }
+        folderContainer.addView(allButton)
+
+        // Dynamically add folder buttons
+        folders.forEach { folder ->
+            val button = Button(this).apply {
+                text = folder.name
+                layoutParams = buttonLayoutParams
+                setBackgroundResource(R.drawable.rounded_rectangle)
+                setTextColor(resources.getColor(android.R.color.white))
+                setPadding(16, 8, 16, 8)
+                textSize = 10f
+                setOnClickListener {
+                    clearColor();
+                    background.setTint(ContextCompat.getColor(applicationContext, R.color.accent_1))
+                    notes = NoteRepository(db.noteDao()).getNoteByFolderId(folder.id)
+                    populate_notes()
+                }
+            }
+            folderContainer.addView(button)
+        }
+
+    }
+
+    private fun showAddFolderDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_folder, null)
+        val folderNameInput = dialogView.findViewById<TextInputEditText>(R.id.folderNameInput)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Add Folder")
+            .setView(dialogView)
+            .setPositiveButton("Add") { dialog, which ->
+                val folderName = folderNameInput.text.toString()
+                if (folderName.isNotEmpty()) {
+                    val newFolder = Folder(name = folderName)
+                    folderViewModel.addFolder(newFolder)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
 
     fun add_listeners(){
         addButton = findViewById(R.id.addButton)
+        folderAddButton=findViewById(R.id.folderAddButton)
 
         addButton.setOnClickListener{
             val intent = Intent(
@@ -71,6 +159,19 @@ class MainActivity : AppCompatActivity() {
                 EditNote::class.java
             )
             startActivity(intent)
+        }
+
+        folderAddButton.setOnClickListener{
+            showAddFolderDialog()
+        }
+    }
+
+    private fun clearColor() {
+        for (i in 0 until folderContainer.childCount) {
+            val child = folderContainer.getChildAt(i)
+            if (child is Button) {
+                child.backgroundTintList = null  // Reset background tint list to remove any color
+            }
         }
     }
 }
