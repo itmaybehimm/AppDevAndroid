@@ -43,4 +43,8 @@ class QuizViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    suspend fun addQuizAndReturnId(quiz: Quiz): Long {
+        return repository.addQuizAndReturnId(quiz)
+    }
+
 }

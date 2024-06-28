@@ -13,6 +13,9 @@ interface QuizDao {
     @Insert
     suspend fun insertQuiz(quiz: Quiz)
 
+    @Insert
+    suspend fun insertQuizAndReturnId(quiz: Quiz): Long
+
     @Update
     suspend fun updateQuiz(quiz: Quiz)
 

@@ -16,4 +16,8 @@ class AnswerRepository(private val answerDao: AnswerDao) {
     suspend fun deleteAnswer(answer: Answer) {
         answerDao.deleteAnswer(answer)
     }
+
+     fun getAnswerByQuizAndQuestion(quizId: Int, questionId: Int): Answer? {
+        return answerDao.getAnswerByQuizAndQuestion(quizId, questionId)
+    }
 }

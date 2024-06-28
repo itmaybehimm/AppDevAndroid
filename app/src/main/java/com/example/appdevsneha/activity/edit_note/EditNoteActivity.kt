@@ -1,18 +1,15 @@
 package com.example.appdevsneha.activity.edit_note
 
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,11 +18,9 @@ import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
 import com.example.appdevsneha.data.repository.FolderViewModel
-import com.example.appdevsneha.data.repository.NoteRepository
 import com.example.appdevsneha.data.repository.NoteViewModel
-import com.google.android.material.textfield.TextInputEditText
 
-class EditNote : AppCompatActivity() {
+class EditNoteActivity : AppCompatActivity() {
     private lateinit var titleInput:EditText
     private lateinit var bodyInput:EditText
     private lateinit var note:Note

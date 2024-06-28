@@ -35,4 +35,8 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
             repository.deleteQuestion(question)
         }
     }
+
+    fun getNQuestions(numQuestion:Int):LiveData<List<Question>>{
+        return repository.getNQuestions(numQuestion)
+    }
 }

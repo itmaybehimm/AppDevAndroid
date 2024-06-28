@@ -35,4 +35,8 @@ class AnswerViewModel(application: Application) : AndroidViewModel(application) 
             repository.deleteAnswer(answer)
         }
     }
+
+     fun getAnswerByQuizAndQuestion(quizId: Int, questionId: Int): Answer? {
+        return repository.getAnswerByQuizAndQuestion(quizId, questionId)
+    }
 }

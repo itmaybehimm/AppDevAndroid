@@ -17,4 +17,10 @@ class QuestionRepository(private val questionDao: QuestionDao) {
     suspend fun deleteQuestion(question: Question) {
         questionDao.deleteQuestion(question)
     }
+
+    fun getNQuestions(numQuestion:Int):LiveData<List<Question>>{
+        return questionDao.getNQuestions(numQuestion)
+    }
+
+
 }

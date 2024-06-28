@@ -14,8 +14,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appdevsneha.R
-import com.example.appdevsneha.activity.edit_note.EditNote
-import com.example.appdevsneha.activity.quiz.QuizMain
+import com.example.appdevsneha.activity.edit_note.EditNoteActivity
+import com.example.appdevsneha.activity.quiz.QuizMainActivity
 import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 binding.recyclerView.apply {
                     layoutManager = GridLayoutManager(applicationContext, 2)
                     adapter = MainCardAdapter(notes, { note ->
-                        val intent = Intent(this@MainActivity, EditNote::class.java)
+                        val intent = Intent(this@MainActivity, EditNoteActivity::class.java)
                         intent.putExtra("NOTE_ID", note.id)
                         startActivity(intent)
                     }, { note ->
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener{
             val intent = Intent(
                 this,
-                EditNote::class.java
+                EditNoteActivity::class.java
             )
             startActivity(intent)
         }
@@ -201,7 +201,7 @@ class MainActivity : AppCompatActivity() {
         quizButton.setOnClickListener{
             val intent = Intent(
                 this,
-                QuizMain::class.java
+                QuizMainActivity::class.java
             )
             startActivity(intent)
         }

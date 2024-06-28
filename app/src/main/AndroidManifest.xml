@@ -13,10 +13,16 @@
         android:theme="@style/Theme.AppDevSneha"
         tools:targetApi="31">
         <activity
-            android:name=".activity.quiz.QuizMain"
+            android:name=".activity.quiz.QuizPreviousActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.edit_note.EditNote"
+            android:name=".activity.quiz.QuizQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.quiz.QuizMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.edit_note.EditNoteActivity"
             android:exported="false" />
         <activity
             android:name=".activity.main.MainActivity"

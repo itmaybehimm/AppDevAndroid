@@ -23,8 +23,8 @@ data class Question(
     val optionD:String,
 
     @ColumnInfo(name="answer")
-    val answer:String,
+    val answer:Int,
 
     @PrimaryKey(autoGenerate = true)
-    val int: Int=0
+    val id: Int=0
 )

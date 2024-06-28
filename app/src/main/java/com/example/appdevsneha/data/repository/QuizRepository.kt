@@ -18,5 +18,7 @@ class QuizRepository(private val quizDao: QuizDao) {
         quizDao.deleteQuiz(quiz)
     }
 
-
+    suspend fun addQuizAndReturnId(quiz: Quiz): Long {
+        return quizDao.insertQuizAndReturnId(quiz)
+    }
 }
