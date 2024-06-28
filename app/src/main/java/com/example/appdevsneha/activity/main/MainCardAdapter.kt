@@ -21,9 +21,5 @@ class MainCardAdapter(
 
     override fun onBindViewHolder(holder: MainCardViewHolder, position: Int) {
         holder.bindNote(notes[position],clickListener,clickListenerDelete)
-//
-//        holder.itemView.setOnClickListener{
-//            clickListener(notes[position])
-//        }
     }
 }

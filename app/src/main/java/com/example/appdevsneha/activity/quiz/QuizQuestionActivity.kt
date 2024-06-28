@@ -28,7 +28,7 @@ class QuizQuestionActivity : AppCompatActivity() {
     private lateinit  var quizViewModel: QuizViewModel
     private lateinit  var questionViewModel: QuestionViewModel
     private lateinit  var answerViewModel:AnswerViewModel
-    private  var quizId:Long = -1
+    private  var quizId:Int = -1
     private var score=0
     private val maxQuestions = 5
     private var pageNo:Int=1
@@ -72,7 +72,7 @@ class QuizQuestionActivity : AppCompatActivity() {
 
     private fun insertQuizAndAnswer(){
         CoroutineScope(Dispatchers.IO).launch{
-            quizId = quizViewModel.addQuizAndReturnId(Quiz())
+            quizId = quizViewModel.addQuizAndReturnId(Quiz()).toInt()
 
             withContext(Dispatchers.Main) {
                 questions.observe(this@QuizQuestionActivity, Observer { questions ->
@@ -101,6 +101,10 @@ class QuizQuestionActivity : AppCompatActivity() {
                 if(currentQuestion.answer == selectedOption){
                     score+=1
                     showCorrectPopup()
+                    quizViewModel.updateQuiz(Quiz(
+                        id = quizId,
+                        score = score
+                    ))
                 }
                 else{
                     showIncorrectPopup()

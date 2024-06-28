@@ -10,7 +10,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.appdevsneha.R
 
 class QuizMainActivity : AppCompatActivity() {
-    lateinit var startQuizButton:Button;
+    private lateinit var startQuizButton:Button
+    private lateinit var viewQuizButton:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,7 +23,7 @@ class QuizMainActivity : AppCompatActivity() {
         }
 
         startQuizButton = findViewById(R.id.startQuizButton)
-
+        viewQuizButton=findViewById(R.id.viewQuizButton)
         addListeners()
     }
 
@@ -31,6 +32,14 @@ class QuizMainActivity : AppCompatActivity() {
             val intent = Intent(
                 this,
                 QuizQuestionActivity::class.java
+            )
+            startActivity(intent)
+        }
+
+        viewQuizButton.setOnClickListener{
+            val intent = Intent(
+                this,
+                QuizPreviousActivity::class.java
             )
             startActivity(intent)
         }

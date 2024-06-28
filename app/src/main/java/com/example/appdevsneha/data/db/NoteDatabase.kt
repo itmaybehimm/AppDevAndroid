@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [Note::class, Folder::class, Quiz::class, Answer::class, Question::class],
-    version = 5
+    version = 6
 )
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao

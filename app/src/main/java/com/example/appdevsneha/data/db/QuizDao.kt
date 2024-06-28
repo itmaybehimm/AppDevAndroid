@@ -22,6 +22,6 @@ interface QuizDao {
     @Delete
     suspend fun deleteQuiz(quiz: Quiz)
 
-    @Query("SELECT * FROM quiz")
+    @Query("SELECT * FROM quiz ORDER BY id DESC")
     fun readAllQuizes():LiveData<List<Quiz>>
 }
