@@ -13,12 +13,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.appdevsneha.MyApp
 import com.example.appdevsneha.R
+import com.example.appdevsneha.Utils
 import com.example.appdevsneha.activity.edit_note.EditNoteActivity
 import com.example.appdevsneha.activity.quiz.QuizMainActivity
 import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
+import com.example.appdevsneha.data.model.User
 import com.example.appdevsneha.data.repository.FolderViewModel
 import com.example.appdevsneha.data.repository.NoteViewModel
 import com.example.appdevsneha.databinding.ActivityMainBinding
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private var currentSearchString: String? = ""
     private var currentFolderId: Int? = null
+    private var user: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -58,18 +63,21 @@ class MainActivity : AppCompatActivity() {
         folderContainer = findViewById(R.id.folderContainer)
         searchView = findViewById(R.id.seachBar)
 
+        user =Utils.getUser(this)
+
         folderViewModel = ViewModelProvider(this)[FolderViewModel::class.java]
 
-        folderViewModel.readAllFolders().observe(this) { folders ->
+        folderViewModel.readAllFolders(user!!.id).observe(this) { folders ->
             folders?.let { populateFolders(it) }
         }
-
 
         populateNotes()
         addListeners()
         setupSearch()
 
     }
+
+
 
     private fun setupSearch() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -90,15 +98,15 @@ class MainActivity : AppCompatActivity() {
         val searchString = currentSearchString ?: ""
         notes = when {
             currentFolderId != null && searchString.isEmpty() -> {
-                noteViewModel.getNotesByFolderId(currentFolderId!!)
+                noteViewModel.getNotesByFolderId(currentFolderId!!,user!!.id)
             }
             currentFolderId == null && searchString.isNotEmpty() -> {
-                noteViewModel.searchNotes("%$searchString%")
+                noteViewModel.searchNotes("%$searchString%",user!!.id)
             }
             currentFolderId != null && searchString.isNotEmpty() -> {
-                noteViewModel.searchNotesInFolder("%$searchString%", currentFolderId!!)
+                noteViewModel.searchNotesInFolder("%$searchString%", currentFolderId!!,user!!.id)
             }
-            else -> noteViewModel.readAllNotes()
+            else -> noteViewModel.readAllNotes(user!!.id)
         }
 
         notes.observe(this) { notes ->
@@ -127,7 +135,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val allButton = Button(this).apply {
-            text = "All"
+            text = buildString {
+        append("All")
+    }
             layoutParams = buttonLayoutParams
             setBackgroundResource(R.drawable.rounded_rectangle)
             setTextColor(resources.getColor(android.R.color.white))
@@ -173,7 +183,7 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Add") { _, _ ->
                 val folderName = folderNameInput.text.toString()
                 if (folderName.isNotEmpty()) {
-                    val newFolder = Folder(name = folderName)
+                    val newFolder = Folder(name = folderName, userId = user!!.id)
                     folderViewModel.addFolder(newFolder)
                 }
             }

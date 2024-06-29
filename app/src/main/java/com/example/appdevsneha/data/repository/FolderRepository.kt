@@ -5,7 +5,10 @@ import com.example.appdevsneha.data.db.FolderDao
 import com.example.appdevsneha.data.model.Folder
 
 class FolderRepository(private val folderDao: FolderDao) {
-    val readAllFolders:LiveData<List<Folder>> = folderDao.readAllFolders()
+
+    fun readAllFolders(userId:Int):LiveData<List<Folder>>{
+        return folderDao.readAllFolders(userId)
+    }
     suspend fun addFolder(folder: Folder){
         folderDao.addFolder(folder)
     }
@@ -18,8 +21,8 @@ class FolderRepository(private val folderDao: FolderDao) {
         folderDao.deleteFolder(folder)
     }
 
-    fun getFolderById(folderId: Int): LiveData<Folder> {
-        return folderDao.getFolderById(folderId)
+    fun getFolderById(folderId: Int,userId:Int): LiveData<Folder> {
+        return folderDao.getFolderById(folderId,userId)
     }
 
 

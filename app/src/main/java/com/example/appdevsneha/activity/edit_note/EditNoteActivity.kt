@@ -11,19 +11,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appdevsneha.R
 import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
+import com.example.appdevsneha.data.model.User
 import com.example.appdevsneha.data.repository.FolderViewModel
 import com.example.appdevsneha.data.repository.NoteViewModel
 
 class EditNoteActivity : AppCompatActivity() {
     private lateinit var titleInput:EditText
     private lateinit var bodyInput:EditText
-    private lateinit var note:Note
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var folderViewModel: FolderViewModel
     private lateinit var saveButton:Button
@@ -32,6 +31,8 @@ class EditNoteActivity : AppCompatActivity() {
     private var noteId: Int = -1
     private var folderId: Int? = null
     private var isNewNote = true
+    private var user : User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,8 +42,8 @@ class EditNoteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
-        folderViewModel=ViewModelProvider(this).get(FolderViewModel::class.java)
+        noteViewModel = ViewModelProvider(this)[NoteViewModel::class.java]
+        folderViewModel= ViewModelProvider(this)[FolderViewModel::class.java]
 
         titleInput = findViewById(R.id.titleInput)
         bodyInput = findViewById(R.id.bodyInput)
@@ -60,24 +61,36 @@ class EditNoteActivity : AppCompatActivity() {
         addListeners()
     }
     private fun getNote() {
-        noteViewModel.getNoteById(noteId).observe(this, Observer { note ->
+        noteViewModel.getNoteById(noteId, user!!.id).observe(this) { note ->
             note?.let {
                 titleInput.setText(it.title)
                 bodyInput.setText(it.body)
                 folderId = it.folderId
                 if (folderId != null) {
-                    folderViewModel.getFolderById(folderId!!).observe(this, Observer { folder ->
+                    folderViewModel.getFolderById(folderId!!,user!!.id).observe(this) { folder ->
                         folder?.let {
-                            chooseFolderButton.background.setTint(ContextCompat.getColor(this, R.color.accent_1))
+                            chooseFolderButton.background.setTint(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.accent_1
+                                )
+                            )
                             chooseFolderButton.text = folder.name
                         }
-                    })
+                    }
                 } else {
-                    chooseFolderButton.background.setTint(ContextCompat.getColor(this, R.color.onBackground))
-                    chooseFolderButton.text = "Folder"
+                    chooseFolderButton.background.setTint(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.onBackground
+                        )
+                    )
+                    chooseFolderButton.text = buildString {
+        append("Folder")
+    }
                 }
             }
-        })
+        }
     }
 
     private fun saveNote(exit:Boolean=true) {
@@ -87,14 +100,16 @@ class EditNoteActivity : AppCompatActivity() {
             Note(
                 title = title,
                 body = body,
-                folderId = folderId
+                folderId = folderId,
+                userId = user!!.id
             )
         } else {
             Note(
                 id = noteId,
                 title = title,
                 body = body,
-                folderId = folderId
+                folderId = folderId,
+                userId=user!!.id
             )
         }
 
@@ -116,8 +131,8 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     private fun showChooseFolderDialog() {
-        val folderLiveData: LiveData<List<Folder>> = NoteDatabase.getDatabaseInstance(this).folderDao().readAllFolders()
-        folderLiveData.observe(this, Observer { folders ->
+        val folderLiveData: LiveData<List<Folder>> = NoteDatabase.getDatabaseInstance(this).folderDao().readAllFolders(user!!.id)
+        folderLiveData.observe(this) { folders ->
             val builder = AlertDialog.Builder(this)
 
             val dialogLayout = layoutInflater.inflate(R.layout.dialog_choose_folder, null)
@@ -134,30 +149,44 @@ class EditNoteActivity : AppCompatActivity() {
                 )
                 folderButton.setOnClickListener {
                     folderId = folder.id
-                    chooseFolderButton.background.setTint(ContextCompat.getColor(this, R.color.accent_1))
-                    chooseFolderButton.setText(folder.name)
+                    chooseFolderButton.background.setTint(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.accent_1
+                        )
+                    )
+                    chooseFolderButton.text = folder.name
 
 
                 }
                 folderList.addView(folderButton)
             }
             val folderButton = Button(this)
-            folderButton.text = "Remove from Folder"
+            folderButton.text = buildString {
+        append("Remove from Folder")
+    }
             folderButton.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             folderButton.setOnClickListener {
-                folderId=null
-                chooseFolderButton.background.setTint(ContextCompat.getColor(this,R.color.onBackground))
-                chooseFolderButton.setText("Folder")
+                folderId = null
+                chooseFolderButton.background.setTint(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.onBackground
+                    )
+                )
+                chooseFolderButton.text = buildString {
+                    append("Folder")
+                }
 
             }
             folderList.addView(folderButton)
             builder.setView(dialogLayout)
 
             builder.show()
-        })
+        }
     }
 
 

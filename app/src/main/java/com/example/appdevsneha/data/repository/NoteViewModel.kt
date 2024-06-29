@@ -10,17 +10,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application):AndroidViewModel(application) {
-    private val readAllData:LiveData<List<Note>>
     private val repository: NoteRepository
     protected val scope = CoroutineScope(Dispatchers.Main)
     init{
         val noteDao = NoteDatabase.getDatabaseInstance(application).noteDao()
         repository = NoteRepository(noteDao)
-        readAllData = repository.readAllNotes
+
     }
 
-    fun readAllNotes():LiveData<List<Note>>{
-        return readAllData
+    fun readAllNotes(userId: Int):LiveData<List<Note>>{
+        return repository.readAllNotes(userId)
     }
 
     fun addNote(note: Note){
@@ -36,20 +35,20 @@ class NoteViewModel(application: Application):AndroidViewModel(application) {
 
     }
 
-    fun getNoteById(noteId: Int): LiveData<Note> {
-        return repository.getNoteById(noteId)
+    fun getNoteById(noteId: Int, userId:Int): LiveData<Note> {
+        return repository.getNoteById(noteId, userId)
     }
 
-    fun getNotesByFolderId(folderId:Int):LiveData<List<Note>>{
-        return  repository.getNoteByFolderId(folderId)
+    fun getNotesByFolderId(folderId:Int, userId:Int):LiveData<List<Note>>{
+        return  repository.getNoteByFolderId(folderId, userId)
     }
 
-    fun searchNotes(searchQuery:String):LiveData<List<Note>>{
-        return repository.searchNotes(searchQuery)
+    fun searchNotes(searchQuery:String, userId:Int):LiveData<List<Note>>{
+        return repository.searchNotes(searchQuery, userId)
     }
 
-    fun searchNotesInFolder(searchQuery:String,folderId:Int):LiveData<List<Note>>{
-        return repository.searchNotesInFolder(searchQuery,folderId)
+    fun searchNotesInFolder(searchQuery:String,folderId:Int, userId:Int):LiveData<List<Note>>{
+        return repository.searchNotesInFolder(searchQuery,folderId, userId)
     }
     fun deleteNote(note: Note) {
         scope.launch {

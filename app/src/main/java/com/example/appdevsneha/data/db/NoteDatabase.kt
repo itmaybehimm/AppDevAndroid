@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [Note::class, Folder::class, Quiz::class, Answer::class, Question::class],
-    version = 6
+    entities = [Note::class, Folder::class, Quiz::class, Answer::class, Question::class,User::class],
+    version = 9
 )
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
@@ -20,7 +20,7 @@ abstract class NoteDatabase : RoomDatabase() {
     abstract fun quizDao(): QuizDao
     abstract fun questionDao(): QuestionDao
     abstract fun answerDao(): AnswerDao
-
+    abstract fun userDao(): UserDao
     companion object {
         @Volatile
         private var INSTANCE: NoteDatabase? = null

@@ -11,17 +11,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class QuizViewModel(application: Application): AndroidViewModel(application) {
-    private val readAllQuizes: LiveData<List<Quiz>>
     private val repository: QuizRepository
     protected val scope = CoroutineScope(Dispatchers.Main)
     init{
         val quizDao = NoteDatabase.getDatabaseInstance(application).quizDao()
         repository = QuizRepository(quizDao)
-        readAllQuizes = repository.readAllQuizes
     }
 
-    fun readAllQuizes(): LiveData<List<Quiz>> {
-        return readAllQuizes
+    fun readAllQuizes(userId:Int): LiveData<List<Quiz>> {
+        return repository.readAllQuizzes(userId)
     }
 
     fun addQuiz(quiz: Quiz){

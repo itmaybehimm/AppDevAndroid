@@ -1,6 +1,6 @@
 package com.example.appdevsneha.activity.quiz
 
-import CustomDialog
+import com.example.appdevsneha.CustomDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,12 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appdevsneha.R
+import com.example.appdevsneha.Utils
 import com.example.appdevsneha.data.model.Answer
 import com.example.appdevsneha.data.model.Question
 import com.example.appdevsneha.data.model.Quiz
+import com.example.appdevsneha.data.model.User
 import com.example.appdevsneha.data.repository.AnswerViewModel
 import com.example.appdevsneha.data.repository.QuestionViewModel
 import com.example.appdevsneha.data.repository.QuizViewModel
@@ -38,6 +39,7 @@ class QuizQuestionActivity : AppCompatActivity() {
     private lateinit var optionCButton:Button
     private lateinit var optionDButton:Button
     private lateinit var questionView:TextView
+    private var user: User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +63,8 @@ class QuizQuestionActivity : AppCompatActivity() {
         optionDButton=findViewById(R.id.optionD)
         questionView=findViewById(R.id.question)
 
+        user = Utils.getUser(this)
+
         insertQuizAndAnswer()
         displayQuestion()
         optionAButton.setOnClickListener { handleAnswer(1) }
@@ -72,15 +76,15 @@ class QuizQuestionActivity : AppCompatActivity() {
 
     private fun insertQuizAndAnswer(){
         CoroutineScope(Dispatchers.IO).launch{
-            quizId = quizViewModel.addQuizAndReturnId(Quiz()).toInt()
+            quizId = quizViewModel.addQuizAndReturnId(Quiz(userId = user!!.id)).toInt()
 
             withContext(Dispatchers.Main) {
-                questions.observe(this@QuizQuestionActivity, Observer { questions ->
+                questions.observe(this@QuizQuestionActivity) { questions ->
                     if (questions != null && questions.isNotEmpty()) {
                         CoroutineScope(Dispatchers.IO).launch {
                             questions.forEach { question ->
                                 val answer = Answer(
-                                    quiz = quizId.toInt(),
+                                    quiz = quizId,
                                     questionId = question.id,
                                     answer = null
                                 )
@@ -88,7 +92,7 @@ class QuizQuestionActivity : AppCompatActivity() {
                             }
                         }
                     }
-                })
+                }
             }
         }
     }
@@ -103,7 +107,8 @@ class QuizQuestionActivity : AppCompatActivity() {
                     showCorrectPopup()
                     quizViewModel.updateQuiz(Quiz(
                         id = quizId,
-                        score = score
+                        score = score,
+                        userId = user!!.id
                     ))
                 }
                 else{
@@ -111,7 +116,7 @@ class QuizQuestionActivity : AppCompatActivity() {
                 }
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val existingAnswer = answerViewModel.getAnswerByQuizAndQuestion(quizId.toInt(), currentQuestion.id)
+                    val existingAnswer = answerViewModel.getAnswerByQuizAndQuestion(quizId, currentQuestion.id)
                     existingAnswer?.let {
                         val updatedAnswer = it.copy(answer = selectedOption)
                         answerViewModel.updateAnswer(updatedAnswer)
@@ -132,16 +137,16 @@ class QuizQuestionActivity : AppCompatActivity() {
 
 
     private fun displayQuestion() {
-        questions.observe(this, Observer { questions->
+        questions.observe(this) { questions ->
             questionView.text = buildString {
                 append("$pageNo. ")
-                append(questions[pageNo-1].question)
+                append(questions[pageNo - 1].question)
             }
-            optionAButton.text = questions[pageNo-1].optionA
-            optionBButton.text = questions[pageNo-1].optionB
-            optionCButton.text = questions[pageNo-1].optionC
-            optionDButton.text = questions[pageNo-1].optionD
-        })
+            optionAButton.text = questions[pageNo - 1].optionA
+            optionBButton.text = questions[pageNo - 1].optionB
+            optionCButton.text = questions[pageNo - 1].optionC
+            optionDButton.text = questions[pageNo - 1].optionD
+        }
     }
 
     private fun showCorrectPopup() {
@@ -161,7 +166,10 @@ class QuizQuestionActivity : AppCompatActivity() {
         val scoreTextView = dialog.findViewById<TextView>(R.id.scoreText)
         val closeButton = dialog.findViewById<Button>(R.id.closeButton)
 
-        scoreTextView.text = "Your score: $score"
+        scoreTextView.text = buildString {
+        append("Your score: ")
+        append(score)
+    }
 
         closeButton.setOnClickListener {
             dialog.dismiss()

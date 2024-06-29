@@ -11,13 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FolderViewModel(application: Application): AndroidViewModel(application) {
-    private val readAllData: LiveData<List<Folder>>
     private val repository: FolderRepository
     protected val scope = CoroutineScope(Dispatchers.Main)
     init{
         val folderDao = NoteDatabase.getDatabaseInstance(application).folderDao()
         repository = FolderRepository(folderDao)
-        readAllData = repository.readAllFolders
     }
 
     fun addFolder(folder: Folder){
@@ -39,12 +37,12 @@ class FolderViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun readAllFolders():LiveData<List<Folder>>{
-        return readAllData
+    fun readAllFolders(userId:Int):LiveData<List<Folder>>{
+        return repository.readAllFolders(userId)
     }
 
-    fun getFolderById(folderId:Int):LiveData<Folder>{
-        return repository.getFolderById(folderId)
+    fun getFolderById(folderId:Int,userId:Int):LiveData<Folder>{
+        return repository.getFolderById(folderId,userId)
     }
 
 }

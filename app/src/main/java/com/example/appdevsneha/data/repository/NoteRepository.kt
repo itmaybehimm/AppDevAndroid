@@ -5,7 +5,10 @@ import com.example.appdevsneha.data.db.NoteDao
 import com.example.appdevsneha.data.model.Note
 
 class NoteRepository(private val noteDao: NoteDao) {
-    val readAllNotes:LiveData<List<Note>> = noteDao.readAllNotes()
+    fun readAllNotes(userId: Int):LiveData<List<Note>> {
+        return noteDao.readAllNotes(userId)
+    }
+
     suspend fun addNote(note: Note){
         noteDao.insertNote(note)
     }
@@ -18,20 +21,20 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.deleteNote(note)
     }
 
-    fun getNoteById(noteId: Int): LiveData<Note> {
-        return noteDao.getNoteById(noteId)
+    fun getNoteById(noteId: Int,userId:Int): LiveData<Note> {
+        return noteDao.getNoteById(noteId,userId)
     }
 
-    fun getNoteByFolderId(folderId:Int):LiveData<List<Note>>{
-        return noteDao.getNoteByFolderId(folderId)
+    fun getNoteByFolderId(folderId:Int,userId:Int):LiveData<List<Note>>{
+        return noteDao.getNoteByFolderId(folderId,userId)
     }
 
-    fun searchNotes(searchQuery:String):LiveData<List<Note>>{
-        return noteDao.searchNotes(searchQuery)
+    fun searchNotes(searchQuery:String,userId:Int):LiveData<List<Note>>{
+        return noteDao.searchNotes(searchQuery,userId)
     }
 
-    fun searchNotesInFolder(searchQuery:String,folderId:Int):LiveData<List<Note>>{
-        return noteDao.searchNotesInFolder(searchQuery,folderId)
+    fun searchNotesInFolder(searchQuery:String,folderId:Int,userId:Int):LiveData<List<Note>>{
+        return noteDao.searchNotesInFolder(searchQuery,folderId,userId)
     }
 
 }

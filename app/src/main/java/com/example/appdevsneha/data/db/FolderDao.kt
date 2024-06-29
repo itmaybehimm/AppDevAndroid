@@ -21,8 +21,9 @@ interface FolderDao {
     @Delete
     suspend fun deleteFolder(folder: Folder)
 
-    @Query("SELECT * FROM folder")
-    fun readAllFolders(): LiveData<List<Folder>>
-    @Query("SELECT * FROM folder WHERE id= :folderId LIMIT 1")
-    fun getFolderById(folderId:Int):LiveData<Folder>
+    @Query("SELECT * FROM folder WHERE user = :userId")
+    fun readAllFolders(userId:Int): LiveData<List<Folder>>
+
+    @Query("SELECT * FROM folder WHERE id= :folderId AND user = :userId LIMIT 1")
+    fun getFolderById(folderId:Int,userId:Int):LiveData<Folder>
 }

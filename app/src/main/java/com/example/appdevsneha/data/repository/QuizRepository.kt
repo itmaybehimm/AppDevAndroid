@@ -5,7 +5,9 @@ import com.example.appdevsneha.data.db.QuizDao
 import com.example.appdevsneha.data.model.Quiz
 
 class QuizRepository(private val quizDao: QuizDao) {
-    val readAllQuizes: LiveData<List<Quiz>> = quizDao.readAllQuizes()
+    fun readAllQuizzes(userId:Int):LiveData<List<Quiz>>{
+        return quizDao.readAllQuizes(userId)
+    }
     suspend fun addQuiz(quiz: Quiz){
         quizDao.insertQuiz(quiz)
     }

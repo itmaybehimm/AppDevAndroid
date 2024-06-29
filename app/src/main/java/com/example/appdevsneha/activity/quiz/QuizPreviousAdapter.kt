@@ -1,17 +1,14 @@
+package com.example.appdevsneha.activity.quiz
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appdevsneha.activity.main.MainCardViewHolder
-import com.example.appdevsneha.data.model.Note
 import com.example.appdevsneha.data.model.Quiz
-import com.example.appdevsneha.databinding.MainCardCellBinding
 import com.example.appdevsneha.databinding.QuizPreviousRowBinding
 
-class QuizPreviousAdapter(private val quizes: List<Quiz>,private val clickListenerDelete:(Quiz)->Unit) :
+class QuizPreviousAdapter(private val quizzes: List<Quiz>, private val clickListenerDelete:(Quiz)->Unit) :
     RecyclerView.Adapter<QuizPreviousAdapter.QuizPreviousViewHolder>() {
-    class QuizPreviousViewHolder(private val cellBinding: QuizPreviousRowBinding,) : RecyclerView.ViewHolder(cellBinding.root) {
+    class QuizPreviousViewHolder(private val cellBinding: QuizPreviousRowBinding) : RecyclerView.ViewHolder(cellBinding.root) {
         fun bindNote(quiz: Quiz, clickListenerDelete:(Quiz)->Unit){
             cellBinding.quizName.text = buildString {
                 append("Quiz ")
@@ -32,10 +29,10 @@ class QuizPreviousAdapter(private val quizes: List<Quiz>,private val clickListen
         return QuizPreviousViewHolder(binding)
     }
 
-    override fun getItemCount(): Int =quizes.size
+    override fun getItemCount(): Int =quizzes.size
 
     override fun onBindViewHolder(holder: QuizPreviousViewHolder, position: Int) {
-        holder.bindNote(quizes[position],clickListenerDelete)
+        holder.bindNote(quizzes[position],clickListenerDelete)
     }
 
 }
