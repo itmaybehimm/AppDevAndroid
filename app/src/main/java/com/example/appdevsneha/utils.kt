@@ -15,6 +15,5 @@ object Utils {
             return null
         }
         return user
-
     }
 }

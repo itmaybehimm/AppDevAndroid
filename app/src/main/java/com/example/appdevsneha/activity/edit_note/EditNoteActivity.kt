@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.appdevsneha.R
+import com.example.appdevsneha.Utils
 import com.example.appdevsneha.data.db.NoteDatabase
 import com.example.appdevsneha.data.model.Folder
 import com.example.appdevsneha.data.model.Note
@@ -42,6 +43,9 @@ class EditNoteActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        user = Utils.getUser(this)
+
         noteViewModel = ViewModelProvider(this)[NoteViewModel::class.java]
         folderViewModel= ViewModelProvider(this)[FolderViewModel::class.java]
 

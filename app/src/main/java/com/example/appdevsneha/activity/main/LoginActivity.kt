@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        db = NoteDatabase.getDatabaseInstance(this)
         usernameInputEditText = findViewById(R.id.usernameInput)
         passwordInputEditText = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginButton)
