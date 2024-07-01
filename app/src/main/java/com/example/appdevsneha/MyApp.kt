@@ -37,4 +37,8 @@ class MyApp : Application() {
             apply()
         }
     }
+
+    fun removeUserFromPreference() {
+        deleteSharedPreferences("user_prefs")
+    }
 }

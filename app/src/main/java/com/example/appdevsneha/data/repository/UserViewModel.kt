@@ -29,6 +29,22 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    fun updateUser(user: User, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        scope.launch {
+            try {
+                repository.updateUser(user)
+                onSuccess()
+            } catch (e: Exception) {
+                onError(e.message ?: "Error occurred")
+            }
+        }
+    }
+
+    fun deleteUser(user: User) {
+        scope.launch {
+                repository.deleteUser(user)
+        }
+    }
 
     fun getUserByUsernameAndPassword(username: String,password:String): LiveData<User> {
         return repository.getUserByUsernameAndPassword(username,password)

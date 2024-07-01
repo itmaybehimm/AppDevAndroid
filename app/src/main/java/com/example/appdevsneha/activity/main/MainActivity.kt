@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addButton:FloatingActionButton
     private lateinit var folderAddButton:FloatingActionButton
     private lateinit var quizButton:FloatingActionButton
+    private lateinit var profileButton:FloatingActionButton
+    private lateinit var folderUpdateButton:FloatingActionButton
     private lateinit var notes:LiveData<List<Note>>
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var folderViewModel: FolderViewModel
@@ -195,6 +197,8 @@ class MainActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
         folderAddButton=findViewById(R.id.folderAddButton)
         quizButton=findViewById(R.id.quizButton)
+        profileButton=findViewById(R.id.profileButton)
+        folderUpdateButton=findViewById(R.id.folderUpdateButton)
 
         addButton.setOnClickListener{
             val intent = Intent(
@@ -215,6 +219,15 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(intent)
         }
+        profileButton.setOnClickListener{
+            val intent = Intent(
+                this,
+                ProfileUpdateActivity::class.java
+            )
+            startActivity(intent)
+        }
+
+
 
 
     }

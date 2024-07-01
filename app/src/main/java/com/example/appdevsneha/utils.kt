@@ -16,4 +16,13 @@ object Utils {
         }
         return user
     }
+
+    fun logoutUser(context: AppCompatActivity) {
+        val app = context.applicationContext as MyApp
+        app.currentUser = null
+        app.removeUserFromPreference()
+        val intent = Intent(context, LoginActivity::class.java)
+        context.startActivity(intent)
+        context.finishAffinity()
+    }
 }

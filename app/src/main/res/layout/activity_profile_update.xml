@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.main.ProfileUpdateActivity">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:text="Profile"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="60dp"
+            android:background="@android:color/transparent"
+            android:hint="Username"
+            android:inputType="text"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            tools:layout_editor_absoluteX="30dp" />
+
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:hint="Password"
+            android:inputType="text"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/usernameInput"
+            tools:layout_editor_absoluteX="30dp"/>
+
+        <EditText
+            android:id="@+id/password1Input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:hint="Re Password"
+            android:inputType="text"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/passwordInput"
+            tools:layout_editor_absoluteX="30dp"/>
+
+        <EditText
+            android:id="@+id/fullNameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:hint="Full Name"
+            android:inputType="text"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/password1Input"
+            tools:layout_editor_absoluteX="30dp"/>
+
+        <android.widget.Button
+            android:id="@+id/saveButton"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="@color/accent_1"
+            android:text="Save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fullNameInput" />
+
+        <android.widget.Button
+            android:id="@+id/logoutButton"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="@color/accent_1"
+            android:text="Logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
+        <android.widget.Button
+            android:id="@+id/deleteAccountButton"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="Delete Account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
