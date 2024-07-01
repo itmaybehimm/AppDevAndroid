@@ -39,4 +39,8 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
     fun getNQuestions(numQuestion:Int):LiveData<List<Question>>{
         return repository.getNQuestions(numQuestion)
     }
+
+    fun getAllQuestions():LiveData<List<Question>>{
+        return repository.getAllQuestions()
+    }
 }

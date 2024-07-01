@@ -21,6 +21,8 @@ class QuestionRepository(private val questionDao: QuestionDao) {
     fun getNQuestions(numQuestion:Int):LiveData<List<Question>>{
         return questionDao.getNQuestions(numQuestion)
     }
-
+    fun getAllQuestions():LiveData<List<Question>>{
+        return questionDao.getAllQuestions()
+    }
 
 }

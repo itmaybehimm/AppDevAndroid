@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [Note::class, Folder::class, Quiz::class, Answer::class, Question::class,User::class],
-    version = 9
+    version =11
 )
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
@@ -33,7 +33,6 @@ abstract class NoteDatabase : RoomDatabase() {
                     "note-database"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(NoteDatabaseCallback(context))
                     .build()
                 INSTANCE = instance
                 instance
@@ -41,29 +40,4 @@ abstract class NoteDatabase : RoomDatabase() {
         }
     }
 
-    private class NoteDatabaseCallback(private val context: Context) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    populateDatabase(database.quizDao(), database.questionDao(), database.answerDao())
-                }
-            }
-        }
-
-        suspend fun populateDatabase(quizDao: QuizDao, questionDao: QuestionDao, answerDao: AnswerDao) {
-
-            val questions = listOf(
-                Question( question = "What is the fastest land animal?", optionA = "Lion", optionB = "Cheetah", optionC = "Tiger", optionD = "Leopard", answer = 2),
-                Question( question = "Which animal is known as the king of the jungle?", optionA = "Elephant", optionB = "Tiger", optionC = "Lion", optionD = "Leopard", answer = 3),
-                Question( question = "What is the largest mammal?", optionA = "Elephant", optionB = "Blue Whale", optionC = "Giraffe", optionD = "Hippopotamus", answer = 2),
-                Question( question = "Which bird is known for its impressive tail feathers?", optionA = "Peacock", optionB = "Parrot", optionC = "Eagle", optionD = "Penguin", answer = 1),
-                Question( question = "Which animal is known for its ability to change color?", optionA = "Frog", optionB = "Octopus", optionC = "Chameleon", optionD = "Salamander", answer = 3)
-            )
-
-            questions.forEach { question ->
-                questionDao.insertQuestion(question)
-            }
-        }
-    }
 }
