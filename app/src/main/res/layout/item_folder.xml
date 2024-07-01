@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/folderNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Folder Name"
+        android:textSize="16sp" />
+
+    <android.widget.Button
+        android:id="@+id/deleteFolderButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/accent_1"
+        android:background="@drawable/rounded_rectangle"
+        android:text="Delete" />
+</LinearLayout>

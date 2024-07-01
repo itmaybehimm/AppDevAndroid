@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -227,11 +228,40 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-
-
+        folderUpdateButton.setOnClickListener {
+            showUpdateFolderDialog()
+        }
     }
 
+    private fun showUpdateFolderDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_update_folders, null)
+        val folderListLayout = dialogView.findViewById<LinearLayout>(R.id.folderListLayout)
+
+        folderViewModel.readAllFolders(user!!.id).observe(this) { folders ->
+            folders?.let {
+                folderListLayout.removeAllViews()
+                for (folder in it) {
+                    val folderItemView = layoutInflater.inflate(R.layout.item_folder, null)
+                    val folderNameTextView =
+                        folderItemView.findViewById<TextView>(R.id.folderNameTextView)
+                    val deleteButton = folderItemView.findViewById<Button>(R.id.deleteFolderButton)
+
+                    folderNameTextView.text = folder.name
+                    deleteButton.setOnClickListener {
+                        folderViewModel.deleteFolder(folder)
+                    }
+
+                    folderListLayout.addView(folderItemView)
+                }
+            }
+        }
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Update Folders")
+            .setView(dialogView)
+            .setNegativeButton("Close", null)
+            .show()
+    }
 
     private fun clearColor() {
         for (i in 0 until folderContainer.childCount) {
